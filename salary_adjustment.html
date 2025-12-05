@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调薪申请单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --border-color: #dcdcdc;
+            --header-bg: #f5f5f5;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --red-highlight: #ff4d4f;
+            --blue-link: #1890ff;
+            --input-border: #d9d9d9;
+            --btn-gradient-start: #ffffff;
+            --btn-gradient-end: #e6e6e6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        /* Utility Classes */
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-end {
+            justify-content: flex-end;
+        }
+
+        .gap-2 {
+            gap: 8px;
+        }
+
+        .gap-4 {
+            gap: 16px;
+        }
+
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .mt-2 {
+            margin-top: 8px;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .text-red {
+            color: var(--red-highlight);
+        }
+
+        .text-blue {
+            color: var(--blue-link);
+            cursor: pointer;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        /* Header */
+        .modal-header {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            color: #8b572a;
+            /* Brownish title color from screenshot */
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Top Action Bar */
+        .top-action-bar {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .green-btn {
+            background-color: #ddf3d5;
+            border: 1px solid #c3e6cb;
+            padding: 5px 15px;
+            color: #333;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        /* Info Section */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        /* Inputs */
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .styled-input {
+            border: 1px solid var(--input-border);
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+            width: 180px;
+            height: 26px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            height: 32px;
+        }
+
+        .detail-table th {
+            white-space: nowrap;
+        }
+
+        .detail-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Specific Table Column Widths/Alignments */
+        .col-center {
+            text-align: center;
+        }
+
+        .col-right {
+            text-align: right;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            background: linear-gradient(to bottom, #ffffff, #e6e6e6);
+            border: 1px solid #ccc;
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #333;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(to bottom, #f0f0f0, #dcdcdc);
+        }
+
+        .action-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .hint-text {
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* Detail Table Inputs */
+        .table-input {
+            width: 100%;
+            border: 1px solid var(--input-border);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding-right: 20px;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 10px;
+        }
+
+        /* Footer */
+        .footer-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-btn {
+            width: 80px;
+            height: 30px;
+            font-weight: bold;
+        }
+
+        .notes-section {
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 2px;
+        }
+
+        .notes-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #a0522d;
+            /* Match header color approx */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            height: 80px;
+            border: 1px solid var(--input-border);
+            padding: 8px;
+            resize: none;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .bg-red-light {
+            background-color: #fff1f0;
+            color: #cf1322;
+        }
+
+        .tree-indent {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="modal-header">
+        调薪申请单
+        <div class="close-btn"><i class="fas fa-times"></i></div>
+    </div>
+
+    <!-- Top Action Bar -->
+    <div class="top-action-bar">
+        <button class="green-btn">调薪申请单</button>
+    </div>
+
+    <!-- Info Section 1 -->
+    <div class="info-row" style="margin-top: 20px;">
+        <div class="info-item">
+            <span>流程编号:</span>
+            <span class="font-bold">201938</span>
+        </div>
+        <div class="info-item" style="margin-right: 400px;">
+            <span>流程状态:</span>
+            <span>已保存数据</span>
+        </div>
+    </div>
+
+    <div class="section-title">调薪汇总信息</div>
+    <div style="border-top: 1px solid var(--border-color); margin-bottom: 15px;"></div>
+
+    <!-- Filter Inputs -->
+    <div class="info-row">
+        <div class="info-item">
+            <span>调薪部门:</span>
+            <div class="input-wrapper">
+                <input type="text" class="styled-input" value="黑羽工作室">
+                <i class="fas fa-search input-icon"></i>
+            </div>
+        </div>
+        <div class="info-item" style="margin-right: 300px;">
+            <span>调薪人数:</span>
+            <span>8</span>
+        </div>
+    </div>
+    <div class="info-row">
+        <div class="info-item">
+            <span>生效日期:</span>
+            <div class="input-wrapper">
+                <input type="text" class="styled-input" value="11/01/2025">
+                <i class="far fa-calendar-alt input-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Budget Table -->
+    <div class="section-title mt-4">
+        部门月度预算余额概览<br>（校验标准：基于生效日期季度末预算余额）
+    </div>
+    <div style="width: 800px; margin: 0 auto;">
+        <table class="summary-table mb-4" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">部门名称 (层级)</th>
+                    <th style="width: 20%;">当前可用工资预算(万元)</th>
+                    <th style="width: 20%;">本次拟调薪总额 (万元)</th>
+                    <th style="width: 20%;">调整后余额(万元)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><i class="fas fa-caret-down" style="margin-right: 5px;"></i>黑羽工作室 (总计)</td>
+                    <td>112.0</td>
+                    <td style="color: red;">+8.5</td>
+                    <td>103.5</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">程序部</td>
+                    <td>50.0</td>
+                    <td style="color: red;">+1.2</td>
+                    <td>48.8</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">策划部</td>
+                    <td>20.0</td>
+                    <td style="color: red;">+1.0</td>
+                    <td>19.0</td>
+                </tr>
+                <tr class="bg-red-light">
+                    <td class="tree-indent">美术部</td>
+                    <td>4.0</td>
+                    <td style="color: red;">+5.0</td>
+                    <td>-1.0</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">产品支持部</td>
+                    <td>15.0</td>
+                    <td style="color: red;">+0.5</td>
+                    <td>14.5</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">测试部</td>
+                    <td>10.0</td>
+                    <td>0.0</td>
+                    <td>10.0</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">影音设计部</td>
+                    <td>8.0</td>
+                    <td style="color: red;">+0.8</td>
+                    <td>7.2</td>
+                </tr>
+                <tr>
+                    <td class="tree-indent">项目管理部</td>
+                    <td>5.0</td>
+                    <td>0.0</td>
+                    <td>5.0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="section-title mt-4">部门整体调薪成本概览</div>
+    <div style="width: 800px; margin: 0 auto;">
+        <table class="summary-table mb-4" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">类型</th>
+                    <th style="width: 25%;">调薪前</th>
+                    <th style="width: 25%;">调薪后</th>
+                    <th style="width: 25%;">变化值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>月薪合计 (万)</td>
+                    <td>67.8</td>
+                    <td>73.3</td>
+                    <td class="text-red">+8.5</td>
+                </tr>
+                <tr>
+                    <td>2025全年工资 (万)</td>
+                    <td>732.1</td>
+                    <td>743.0</td>
+                    <td class="text-red">+10.9</td>
+                </tr>
+                <tr>
+                    <td>2026全年工资 (万)</td>
+                    <td>814.2</td>
+                    <td>879.6</td>
+                    <td class="text-red">+65.4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Detail Info Section -->
+    <div class="section-title mt-4">调薪明细信息</div>
+    <div style="border-top: 1px solid var(--border-color); margin-bottom: 15px;"></div>
+
+    <div class="action-btn-group">
+        <button class="action-btn">添加员工</button>
+        <button class="action-btn">批量导入</button>
+        <button class="action-btn">下载导入模板</button>
+        <span class="hint-text">(导入模板只支持.xls的格式文件)</span>
+    </div>
+
+    <!-- Main Data Table -->
+    <table class="detail-table">
+        <thead>
+            <tr>
+                <th style="width: 80px;">员工 ID</th>
+                <th style="width: 60px;">姓名</th>
+                <th style="width: 80px;">部门</th>
+                <th style="width: 90px;">调薪前薪资</th>
+                <th style="width: 50px;">CR</th>
+                <th style="width: 90px;">调薪后薪资</th>
+                <th style="width: 50px;">CR</th>
+                <th style="width: 80px;">调薪金额</th>
+                <th style="width: 70px;">调薪幅度</th>
+                <th style="width: 90px;">入职时间</th>
+                <th style="width: 50px;">职级</th>
+                <th style="width: 120px;">近3年绩效(近→远)</th>
+                <th style="width: 70px;">调薪说明</th>
+                <th style="width: 70px;">员工档案</th>
+                <th style="width: 40px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Row 1 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="125572"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>郭晓龙</td>
+                <td>影音设计部</td>
+                <td>90,882.00</td>
+                <td>1.92</td>
+                <td><input type="text" class="table-input" value="98,000"></td>
+                <td>2.07</td>
+                <td class="text-red">+ 7,118</td>
+                <td class="text-red">+7.8%</td>
+                <td>2023/02/28</td>
+                <td>15</td>
+                <td>B/A/无</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 2 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="104674"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>葛祎林</td>
+                <td>策划部</td>
+                <td>169,800.00</td>
+                <td>4.10</td>
+                <td><input type="text" class="table-input" value="180,000"></td>
+                <td>4.35</td>
+                <td class="text-red">+ 10,200</td>
+                <td class="text-red">+6.0%</td>
+                <td>2023/09/07</td>
+                <td>14</td>
+                <td>B/无/无</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 3 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="114343"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>方伟鑫</td>
+                <td>策划部</td>
+                <td>81,411.00</td>
+                <td>2.40</td>
+                <td><input type="text" class="table-input" value="90,000"></td>
+                <td>2.65</td>
+                <td class="text-red">+ 8,589</td>
+                <td class="text-red">+10.6%</td>
+                <td>2017/12/01</td>
+                <td>13</td>
+                <td>S/B/S</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 4 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="120873"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>杜佳浚</td>
+                <td>程序部</td>
+                <td>125,640.00</td>
+                <td>3.98</td>
+                <td><input type="text" class="table-input" value="130,000"></td>
+                <td>4.11</td>
+                <td class="text-red">+ 4,360</td>
+                <td class="text-red">+3.5%</td>
+                <td>2025/07/03</td>
+                <td>11</td>
+                <td>无/B/B</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 5 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="126957"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>朱思霖</td>
+                <td>策划部</td>
+                <td>30,672.00</td>
+                <td>1.97</td>
+                <td><input type="text" class="table-input" value="35,000"></td>
+                <td>2.24</td>
+                <td class="text-red">+ 4,328</td>
+                <td class="text-red">+14.1%</td>
+                <td>2023/12/07</td>
+                <td>09</td>
+                <td>B/无/无</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 6 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="122988"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>李茂贤</td>
+                <td>美术部</td>
+                <td>46,512.50</td>
+                <td>1.13</td>
+                <td><input type="text" class="table-input" value="50,000"></td>
+                <td>1.21</td>
+                <td class="text-red">+ 3,488</td>
+                <td class="text-red">+7.5%</td>
+                <td>2021/11/11</td>
+                <td>14</td>
+                <td>B/B/B</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 7 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="127230"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>顾怡然</td>
+                <td>产品支持部</td>
+                <td>52,228.00</td>
+                <td>1.72</td>
+                <td><input type="text" class="table-input" value="60,000"></td>
+                <td>1.98</td>
+                <td class="text-red">+ 7,772</td>
+                <td class="text-red">+14.9%</td>
+                <td>2024/03/04</td>
+                <td>13</td>
+                <td>B/无/无</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+            <!-- Row 8 -->
+            <tr>
+                <td>
+                    <div class="search-input-wrapper"><input type="text" class="table-input" value="124950"><i
+                            class="fas fa-search"></i></div>
+                </td>
+                <td>李凌志</td>
+                <td>影音设计部</td>
+                <td>81,324.00</td>
+                <td>1.97</td>
+                <td><input type="text" class="table-input" value="90,000"></td>
+                <td>2.18</td>
+                <td class="text-red">+ 8,676</td>
+                <td class="text-red">+10.7%</td>
+                <td>2022/09/26</td>
+                <td>14</td>
+                <td>B/B/无</td>
+                <td><a class="text-blue">调薪说明</a></td>
+                <td><a class="text-blue">员工档案</a></td>
+                <td class="text-center"><i class="fas fa-trash-alt" style="color: #999; cursor: pointer;"></i></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Footer Actions -->
+    <div class="footer-actions">
+        <button class="action-btn footer-btn">保存</button>
+        <button class="action-btn footer-btn">提交</button>
+    </div>
+
+    <!-- Notes Section -->
+    <div class="notes-section">
+        <div class="notes-header">
+            <i class="fas fa-caret-down"></i> 备注
+        </div>
+        <textarea class="notes-textarea" placeholder="请填写调薪原因"></textarea>
+    </div>
+
+</body>
+
+</html>
