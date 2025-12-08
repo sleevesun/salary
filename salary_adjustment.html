@@ -355,7 +355,7 @@
         </div>
     </div>
 
-    <div class="section-title">调薪汇总信息</div>
+    <div class="section-title">调薪基本信息</div>
     <div style="border-top: 1px solid var(--border-color); margin-bottom: 15px;"></div>
 
     <!-- Filter Inputs -->
@@ -366,10 +366,6 @@
                 <input type="text" class="styled-input" value="黑羽工作室">
                 <i class="fas fa-search input-icon"></i>
             </div>
-        </div>
-        <div class="info-item" style="margin-right: 300px;">
-            <span>调薪人数:</span>
-            <span>8</span>
         </div>
     </div>
     <div class="info-row">
@@ -383,75 +379,80 @@
     </div>
 
     <!-- Department Budget Table -->
-    <div class="section-title mt-4">
-        部门月度预算余额概览<br>（校验标准：基于生效日期季度末预算余额）
+    <div class="section-title mt-4" style="width: 800px; margin-left: 0; margin-right: auto; text-align: left;">
+        部门月度工资预算余额概览<br>（校验标准：基于生效日期季度末数据）
     </div>
-    <div style="width: 800px; margin: 0 auto;">
+    <div style="width: 800px; margin-left: 0; margin-right: auto;">
         <table class="summary-table mb-4" style="width: 100%;">
             <thead>
                 <tr>
-                    <th style="width: 40%;">部门名称 (层级)</th>
-                    <th style="width: 20%;">当前可用工资预算(万元)</th>
-                    <th style="width: 20%;">本次拟调薪总额 (万元)</th>
-                    <th style="width: 20%;">调整后余额(万元)</th>
+                    <th style="width: 40%;">部门名称</th>
+                    <th style="width: 20%;">调薪前余额(万元)</th>
+                    <th style="width: 20%;">调薪后余额(万元)</th>
+                    <th style="width: 20%;">本次拟调薪(万元)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><i class="fas fa-caret-down" style="margin-right: 5px;"></i>黑羽工作室 (总计)</td>
+                    <td>黑羽工作室 (总计)</td>
                     <td>112.0</td>
-                    <td style="color: red;">+8.5</td>
                     <td>103.5</td>
+                    <td style="color: red;">+8.5</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">程序部</td>
                     <td>50.0</td>
-                    <td style="color: red;">+1.2</td>
                     <td>48.8</td>
+                    <td style="color: red;">+1.2</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">策划部</td>
                     <td>20.0</td>
-                    <td style="color: red;">+1.0</td>
                     <td>19.0</td>
+                    <td style="color: red;">+1.0</td>
                 </tr>
                 <tr class="bg-red-light">
                     <td class="tree-indent">美术部</td>
                     <td>4.0</td>
-                    <td style="color: red;">+5.0</td>
                     <td>-1.0</td>
+                    <td style="color: red;">+5.0</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">产品支持部</td>
                     <td>15.0</td>
-                    <td style="color: red;">+0.5</td>
                     <td>14.5</td>
+                    <td style="color: red;">+0.5</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">测试部</td>
                     <td>10.0</td>
-                    <td>0.0</td>
                     <td>10.0</td>
+                    <td>0.0</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">影音设计部</td>
                     <td>8.0</td>
-                    <td style="color: red;">+0.8</td>
                     <td>7.2</td>
+                    <td style="color: red;">+0.8</td>
                 </tr>
                 <tr>
                     <td class="tree-indent">项目管理部</td>
                     <td>5.0</td>
-                    <td>0.0</td>
                     <td>5.0</td>
+                    <td>0.0</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <!-- Summary Table -->
-    <div class="section-title mt-4">部门整体调薪成本概览</div>
-    <div style="width: 800px; margin: 0 auto;">
+    <div class="section-title mt-4" style="width: 800px; margin: 16px auto 0 0; text-align: left;">
+        调薪人员工资概览
+    </div>
+    <div style="width: 800px; margin: 5px auto 10px 0; text-align: left; font-weight: normal; font-size: 12px;">
+        调薪人数: 8
+    </div>
+    <div style="width: 800px; margin-left: 0; margin-right: auto;">
         <table class="summary-table mb-4" style="width: 100%;">
             <thead>
                 <tr>
