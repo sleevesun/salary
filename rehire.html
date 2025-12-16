@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审批入职流程</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-text: #333333;
+            --secondary-text: #666666;
+            --border-color: #DDDDDD;
+            --header-bg: #FAF3EC;
+            --header-text: #8B4513;
+            /* Brownish color for main title */
+            --tab-active-bg: #E0F2F1;
+            /* Light teal/green for active tab */
+            --tab-active-border: #80CBC4;
+            --link-color: #4A90E2;
+            --section-title-weight: bold;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+            color: var(--primary-text);
+            font-size: 13px;
+        }
+
+        /* Scheme Visibility Logic */
+        body.scheme-a .scheme-b-only {
+            display: none !important;
+        }
+
+        body.scheme-b .scheme-a-only {
+            display: none !important;
+        }
+
+        /* Top Header */
+        .top-header {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--header-text);
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: #999;
+            font-size: 18px;
+        }
+
+        /* Main Container */
+        .container {
+            padding: 10px 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            padding: 6px 15px;
+            border: 1px solid #CCC;
+            cursor: pointer;
+            background-color: #FFF;
+            color: #333;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        .tab.active {
+            background-color: #C8E6C9;
+            /* Light green approximation */
+            border-color: #81C784;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #F5F5F5;
+        }
+
+        /* Toggle Switch */
+        .scheme-toggle-btn {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 20px;
+            color: #333;
+        }
+
+        .scheme-toggle-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Process Info Bar */
+        .process-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #EEE;
+            margin-bottom: 20px;
+        }
+
+        .process-left {
+            display: flex;
+            gap: 40px;
+        }
+
+        .process-link {
+            color: var(--link-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .process-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        /* Grid Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr 100px 1fr;
+            column-gap: 20px;
+            row-gap: 15px;
+            align-items: center;
+        }
+
+        .form-label {
+            text-align: right;
+            color: var(--secondary-text);
+            font-weight: 500;
+        }
+
+        .required::before {
+            content: "*";
+            color: red;
+            margin-right: 2px;
+        }
+
+        .form-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #DDD;
+            border-radius: 3px;
+            background-color: #F8F8F8;
+            /* Slight background for readonly look */
+            font-size: 13px;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        /* Specific Overrides for Rehire Policy Links */
+        .rehire-links {
+            display: flex;
+            gap: 20px;
+            padding-left: 120px;
+            /* Align with content column */
+        }
+
+        .rehire-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* Checkbox styling */
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Salary Section Specifics */
+        .salary-grid {
+            display: grid;
+            grid-template-columns: 100px 150px 80px 1fr 100px 150px 80px 1fr;
+            column-gap: 10px;
+            row-gap: 15px;
+            align-items: center;
+        }
+
+        /* Merging columns for inputs that span */
+        .col-span-3 {
+            grid-column: span 3;
+        }
+
+        /* Horizontal Rule */
+        hr {
+            border: 0;
+            border-top: 1px solid #DDD;
+            margin: 0 0 20px 0;
+        }
+
+        .status-submitted {
+            /* color: #333; */
+        }
+
+        /* Help icon */
+        .fa-question-circle {
+            color: #999;
+            margin-left: 5px;
+            font-size: 14px;
+            cursor: help;
+        }
+
+        /* Custom Input mimic */
+        .display-box {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            padding: 4px 8px;
+            min-height: 20px;
+            border-radius: 2px;
+        }
+
+        .empty-box {
+            background: #eee;
+            height: 24px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            font-size: 13px;
+        }
+
+        .modal-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            width: 550px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .modal-header {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: flex-end;
+            background-color: #f9f9f9;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            color: #666;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px 30px;
+        }
+
+        .modal-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .modal-label {
+            width: 100px;
+            text-align: right;
+            padding-right: 15px;
+            color: #666;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .modal-value {
+            color: #333;
+            flex-grow: 1;
+        }
+
+        .modal-footer {
+            padding: 10px 30px 20px 30px;
+        }
+
+        .btn-back {
+            background: linear-gradient(to bottom, #fdfdfd, #e9e9e9);
+            border: 1px solid #ccc;
+            padding: 5px 25px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-back:hover {
+            background: #e0e0e0;
+        }
+    </style>
+    <script>
+        function showModal() {
+            document.getElementById('approvalModal').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('approvalModal').style.display = 'none';
+        }
+
+        function toggleScheme() {
+            const body = document.body;
+            const btn = document.getElementById('toggleBtn');
+            if (body.classList.contains('scheme-a')) {
+                body.classList.remove('scheme-a');
+                body.classList.add('scheme-b');
+                btn.innerText = "切换方案 (当前: 方案二)";
+            } else {
+                body.classList.remove('scheme-b');
+                body.classList.add('scheme-a');
+                btn.innerText = "切换方案 (当前: 方案一)";
+            }
+        }
+    </script>
+</head>
+
+<body class="scheme-a">
+
+    <!-- Header -->
+    <div class="top-header">
+        <button id="toggleBtn" class="scheme-toggle-btn" onclick="toggleScheme()">切换方案 (当前: 方案一)</button>
+        <h1>审批入职流程</h1>
+        <div class="close-btn"><i class="fas fa-times"></i></div>
+    </div>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active">审批信息</button>
+            <button class="tab">面试记录</button>
+            <button class="tab">个人简历</button>
+        </div>
+
+        <hr>
+
+        <!-- Process Info -->
+        <div class="process-info">
+            <div class="process-left">
+                <div>流程编号： <strong>202013</strong></div>
+                <div>审批状态： <span class="status-submitted">已提交</span></div>
+            </div>
+            <div>
+                <a href="#" class="process-link">返回到列表</a>
+            </div>
+        </div>
+
+        <!-- Candidate Basic Info -->
+        <div class="section">
+            <div class="section-title">候选人基本信息</div>
+            <hr>
+            <div class="form-grid">
+                <div class="form-label required">姓名：</div>
+                <div class="form-value">李承彧</div>
+
+                <div class="form-label required">性别：</div>
+                <div class="form-value">男</div>
+
+                <div class="form-label required">计划到岗时间：</div>
+                <div class="form-value">2025/12/31</div>
+
+                <div class="form-label">最高教育程度：</div>
+                <div class="form-value">大学本科</div>
+
+                <div class="form-label required">证件号码：</div>
+                <div class="form-value">110000198504272510</div>
+
+                <div class="form-label required">是否符合学历要求：</div>
+                <div class="form-value">符合</div>
+
+                <div class="form-label">最高学历院校类型：</div>
+                <div>
+                    <select disabled>
+                        <option></option>
+                    </select>
+                </div>
+
+                <div class="form-label">最高学历毕业院校：</div>
+                <div>
+                    <div class="empty-box"></div>
+                </div>
+
+                <div class="form-label">Offer类型：</div>
+                <div>
+                    <select>
+                        <option>社招</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rehire Check -->
+        <div class="section">
+            <div class="section-title">重新雇佣</div>
+            <hr>
+            <div class="form-grid">
+                <!-- Row 1 -->
+                <div class="form-label">重新雇佣员工：</div>
+                <div class="form-value">
+                    <label class="checkbox-item"><input type="checkbox" checked disabled> </label>
+                </div>
+
+                <div class="form-label">上次离职时间：</div>
+                <div class="form-value">2024-10-15</div>
+
+                <!-- Row 2 -->
+                <div class="form-label">上次离职原因：</div>
+                <div class="form-value">主动-个人原因-希望有更多挑战</div>
+
+                <div class="form-label scheme-a-only">离职补偿金：</div>
+                <div class="form-value scheme-a-only">50,000.00 元，其入职前应退还公司50,000.00元。</div>
+
+                <!-- Row 3 (Scheme A Only) -->
+                <div class="form-label scheme-a-only" style="align-self: flex-start; margin-top: 5px;">候选人反馈：</div>
+                <div class="col-span-3 scheme-a-only">
+                    <textarea readonly
+                        style="width: 100%; height: 60px; resize: none; background: #f8f8f8; border: 1px solid #ddd; padding: 5px; border-radius: 3px; font-family: inherit; color: #333;">员工因个人发展原因离职，根据公司政策发放常规离职补偿，已确认入职前归还。</textarea>
+                </div>
+
+                <!-- Row 4 (Scheme A: Risk / Scheme B: Standards) -->
+                <div class="form-label scheme-a-only">风险雇佣原因：</div>
+                <div class="col-span-3 form-value scheme-a-only">
+                    离职前绩效不够优秀 <a href="javascript:void(0)" onclick="showModal()"
+                        style="color: var(--link-color); text-decoration: none; margin-left: 10px;">特殊审批详情&gt;</a>
+                </div>
+
+                <!-- Scheme B Only Field -->
+                <div class="form-label scheme-b-only">回流标准：</div>
+                <div class="form-value scheme-b-only">符合</div>
+            </div>
+        </div>
+
+        <!-- Organization Info -->
+        <div class="section">
+            <div class="section-title">组织架构信息</div>
+            <hr>
+            <div class="form-grid">
+                <div class="form-label">入职部门：</div>
+                <div class="form-value">综合管理</div>
+
+                <div class="form-label required">Base城市：</div>
+                <div class="form-value">北京</div>
+
+                <div class="form-label required">合同签署公司：</div>
+                <div class="form-value">北京冰封互娱科技有限公司</div>
+
+                <div class="form-label required">办公地点：</div>
+                <div class="form-value">ABJ1-望京完美世界大厦</div>
+
+                <div class="form-label">直属上级：</div>
+                <div class="form-value">段培冲</div>
+            </div>
+        </div>
+
+        <!-- Headcount Info -->
+        <div class="section">
+            <div class="section-title">编制信息</div>
+            <hr>
+            <div class="form-grid">
+                <div class="form-label">HC编制部门：</div>
+                <div class="form-value"></div>
+
+                <div class="form-label required">新增/替换HC：</div>
+                <div class="form-value">替换</div>
+
+                <div class="form-label">HC编制类别：</div>
+                <div class="form-value"></div>
+
+                <div class="form-label">替换人员：</div>
+                <div class="form-value">白斌</div>
+
+                <div class="form-label required">招聘渠道：</div>
+                <div class="form-value">公司官网</div>
+
+                <div class="form-label">替换人员离职日期：</div>
+                <div class="form-value">2026/01/07</div>
+            </div>
+        </div>
+
+        <!-- Job Info -->
+        <div class="section">
+            <div class="section-title">职务信息</div>
+            <hr>
+            <div class="form-grid">
+                <div class="form-label required">业务头衔：</div>
+                <div class="form-value">啊啊大</div>
+
+                <div class="form-label required">职务：</div>
+                <div class="form-value">高级测试工程师</div>
+
+                <div class="form-label">管理/专业：</div>
+                <div class="form-value">9-非管理</div>
+
+                <div class="form-label required">职务族群：</div>
+                <div class="form-value">技术群</div>
+
+                <div class="form-label required">职业路径：</div>
+                <div class="form-value">游戏测试</div>
+
+                <div class="form-label required">职级：</div>
+                <div class="form-value" style="display:flex; align-items:center; gap:10px;">
+                    13 <label class="checkbox-item"><input type="checkbox"> 不定级</label>
+                </div>
+
+                <div class="form-label required">员工类别：</div>
+                <div class="form-value">试用员工</div>
+
+                <div class="form-label required">试用期：</div>
+                <div class="form-value">6</div>
+
+                <div class="form-label required">审批级别：</div>
+                <div class="form-value">普通员工</div>
+            </div>
+        </div>
+
+        <!-- Salary Info -->
+        <div class="section">
+            <div class="section-title">薪资信息 <i class="far fa-question-circle"></i></div>
+            <hr>
+            <div class="salary-grid">
+                <div class="form-label required">试用期工资：</div>
+                <div class="form-value">20000.00</div>
+                <div class="form-label">CR值：</div>
+                <div class="form-value">0.84</div>
+
+                <div class="form-label required">转正工资：</div>
+                <div class="form-value">20000.00</div>
+                <div class="form-label">CR值：</div>
+                <div class="form-value">0.84</div>
+
+                <div class="form-label required">实习工资：</div>
+                <div class="form-value col-span-3">0.00</div>
+
+                <div class="form-label">餐补：</div>
+                <div class="form-value col-span-3">400</div>
+
+                <div class="form-label">搬家费：</div>
+                <div class="form-value col-span-3">0.00</div>
+
+                <div class="form-label">约定年终奖月数：</div>
+                <div class="col-span-3">
+                    <div class="empty-box" style="width: 150px;"></div>
+                </div>
+
+                <div class="form-label">住房补贴：</div>
+                <div class="form-value col-span-3">0.00</div>
+
+                <div></div>
+                <div class="col-span-7 checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> 是否有签约金</label>
+                </div>
+
+                <div></div>
+                <div class="col-span-7 checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> 长期激励</label>
+                </div>
+            </div>
+        </div>
+
+        <div style="font-size: 10px; color: #999; margin-top: 20px;">
+            <!-- Hidden footer mimic from screenshot if needed, mostly empty space -->
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div id="approvalModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <div class="modal-label">发起人：</div>
+                    <div class="modal-value">完美世界管理员</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">审批人：</div>
+                    <div class="modal-value">董科/李曦/王娟/CHEN RONG/池宇峰/</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">批准日期时间：</div>
+                    <div class="modal-value">2025/09/15 10:33:36</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">重新雇佣理由：</div>
+                    <div class="modal-value">
+                        <textarea readonly
+                            style="width: 100%; height: 80px; resize: none; border: 1px solid #ddd; border-radius: 3px; padding: 5px; font-family: inherit; color: #333;">离职前近三年年度绩效结果存在 B-/C/D 绩效。不过目前很好，申请重新入职，不需要考虑离职前过去三年的绩效</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-back" onclick="closeModal()">返回</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
